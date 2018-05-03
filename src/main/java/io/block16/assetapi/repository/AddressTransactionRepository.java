@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface AddressTransactionRepository extends CassandraRepository<AddressTransaction, TransactionKey> {
-    @Query("select * from transactions WHERE address=?0 LIMIT 10")
+    @Query("select * from transactions WHERE address=?0 LIMIT 100")
     List<AddressTransaction> findTop10ByKeyAddressLimit(String address);
 }

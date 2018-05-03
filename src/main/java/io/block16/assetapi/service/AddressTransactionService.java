@@ -74,4 +74,8 @@ public class AddressTransactionService {
         addressTransactionRepository.saveAll(dbTxs);
         addressAssetsRepository.saveAll(addressAssets);
     }
+
+    public List<AddressTransaction> findByAddress(String address) {
+        return this.addressTransactionRepository.findTop10ByKeyAddressLimit(address);
+    }
 }

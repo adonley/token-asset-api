@@ -1,87 +1,45 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.10.RELEASE'
-        wrapperVersion = '1.0.9.RELEASE'
-        shadowVersion = '2.0.1'
+        springBootVersion = '2.0.1.RELEASE'
     }
     repositories {
-        jcenter()
-        mavenLocal()
         mavenCentral()
-        maven { url "https://repo.spring.io/snapshot" }
-        maven { url "https://repo.spring.io/milestone" }
     }
     dependencies {
-        classpath "com.github.jengelman.gradle.plugins:shadow:${shadowVersion}"
-        classpath("org.springframework.boot.experimental:spring-boot-thin-gradle-plugin:${wrapperVersion}")
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
 
 apply plugin: 'java'
-apply plugin: 'maven'
 apply plugin: 'eclipse'
-apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'org.springframework.boot'
-apply plugin: 'org.springframework.boot.experimental.thin-launcher'
+apply plugin: 'io.spring.dependency-management'
 
 group = 'io.block16'
-archivesBaseName = 'assetapi'
-version = '0.0.1'
+version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    maven { url "http://dl.bintray.com/ethereum/maven" }
-    maven { url "https://repo.spring.io/snapshot" }
-    maven { url "https://repo.spring.io/milestone" }
-}
-
-ext {
-    springCloudFunctionVersion = "1.0.0.M3"
-    awsLambdaEventsVersion = "1.2.1"
-    awsLambdaCoreVersion = "1.1.0"
-}
-ext['reactor.version'] = "3.0.7.RELEASE"
-
-assemble.dependsOn = [shadowJar, bootRepackage]
-
-jar {
-    manifest {
-        manifest {
-            attributes(
-                    'Manifest-Version': '1.0',
-                    'Implementation-Title': 'AssetApi',
-                    'Start-Class': 'io.block16.assetapi.AssetApiApplication',
-                    'Main-Class': 'org.springframework.boot.loader.wrapper.ThinJarWrapper'
-            )
-        }
-    }
-}
-
-shadowJar {
-    classifier = 'aws'
-}
-
-jar.dependsOn = [thinPom]
-
-configurations {
-    testCompile.extendsFrom(compileOnly)
 }
 
 
 dependencies {
-    compile project(':responses')
-    compile("org.springframework.cloud:spring-cloud-function-web:${springCloudFunctionVersion}")
-    compile("org.springframework.cloud:spring-cloud-function-adapter-aws:${springCloudFunctionVersion}")
-    compile("com.amazonaws:aws-lambda-java-events:${awsLambdaEventsVersion}")
-    compile("com.amazonaws:aws-lambda-java-core:${awsLambdaCoreVersion}")
-    compile('org.springframework.data:spring-data-cassandra:2.0.6.RELEASE')
-    compile("org.springframework.boot:spring-boot-configuration-processor")
-    compile 'io.projectreactor:reactor-core:3.1.5.RELEASE'
-    compile 'com.amazonaws:aws-lambda-java-log4j:1.0.0'
-    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.20'
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-}
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.0.1.RELEASE'
+    // https://mvnrepository.com/artifact/io.netty/netty-all
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.24.Final'
 
+
+    // compile('org.springframework.boot:spring-boot-starter-data-redis')
+    compile('org.springframework.boot:spring-boot-starter-amqp')
+    // compile('org.springframework.boot:spring-boot-starter-data-cassandra')
+    compile('org.springframework.data:spring-data-cassandra:2.0.6.RELEASE')
+    // compile(group: 'redis.clients', name: 'jedis', version: '2.9.0')
+    compile(group: 'com.google.guava', name: 'guava', version: '24.0-jre')
+    compile('org.web3j:core:3.3.1')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
+    compileOnly('org.projectlombok:lombok')
+    runtime('mysql:mysql-connector-java')
+}

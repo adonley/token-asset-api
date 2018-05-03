@@ -1,6 +1,7 @@
 package io.block16.assetapi;
 
-import io.block16.response.exceptions.*;
+
+import io.block16.assetapi.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;

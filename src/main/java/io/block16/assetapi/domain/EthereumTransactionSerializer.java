@@ -1,7 +1,7 @@
 package io.block16.assetapi.domain;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.type.WritableTypeId;
+// import com.fasterxml.jackson.core.type.WritableTypeId;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
@@ -48,9 +48,9 @@ public class EthereumTransactionSerializer extends StdSerializer<EthereumTransac
 
     @Override
     public void serializeWithType(EthereumTransaction value, JsonGenerator gen, SerializerProvider serializers, TypeSerializer typeSer) throws IOException {
-        WritableTypeId typeId = typeSer.typeId(value, START_OBJECT);
+        /*WritableTypeId typeId = typeSer.typeId(value, START_OBJECT);
         typeSer.writeTypePrefix(gen, typeId);
         serialize(value, gen, serializers);
-        typeSer.writeTypeSuffix(gen, typeId);
+        typeSer.writeTypeSuffix(gen, typeId); */
     }
 }
