@@ -10,10 +10,7 @@ import io.block16.assetapi.repository.AddressTransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AddressTransactionService {
@@ -75,7 +72,11 @@ public class AddressTransactionService {
         addressAssetsRepository.saveAll(addressAssets);
     }
 
-    public List<AddressTransaction> findByAddress(String address) {
+    public List<AddressTransaction> findTransactionsByAddress(String address) {
         return this.addressTransactionRepository.findTop10ByKeyAddressLimit(address);
+    }
+
+    public Optional<AddressAsset> findAssetsByAddress(String address) {
+        return this.addressAssetsRepository.findByAddress(address);
     }
 }
