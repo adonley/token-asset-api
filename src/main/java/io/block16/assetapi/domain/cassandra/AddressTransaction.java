@@ -1,6 +1,5 @@
 package io.block16.assetapi.domain.cassandra;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.block16.assetapi.domain.EthereumTransaction;
 import io.block16.assetapi.domain.EthereumTransactionType;
 import lombok.Data;
@@ -13,7 +12,6 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @NoArgsConstructor
 @Table("transactions")
 public class AddressTransaction {
-    @JsonIgnore
     @PrimaryKey
     private TransactionKey key;
     private String value;

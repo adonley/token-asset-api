@@ -76,7 +76,7 @@ public class AddressTransactionService {
         return this.addressTransactionRepository.findTop10ByKeyAddressLimit(address);
     }
 
-    public Optional<AddressAsset> findAssetsByAddress(String address) {
+    public List<AddressAsset> findAssetsByAddress(String address) {
         return this.addressAssetsRepository.findByAddress(address);
     }
 }

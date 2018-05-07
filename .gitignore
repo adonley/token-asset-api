@@ -27,3 +27,5 @@
 
 out/
 .DS_Store
+
+deploy.sh

@@ -1,5 +1,6 @@
 package io.block16.assetapi.domain.cassandra;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class TransactionKey implements Serializable {
     @PrimaryKeyColumn(name = "address", type = PARTITIONED)
     private String address;
 
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @PrimaryKeyColumn(name = "transaction_date", ordinal = 0, type = CLUSTERED, ordering = DESCENDING)
     private Date transactionDate;
 

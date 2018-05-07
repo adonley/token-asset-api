@@ -7,12 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -28,21 +30,19 @@ public class TransactionHandler {
         this.addressTransactionService = addressTransactionService;
     }
 
-    @GetMapping("/v1/{address}/transactions")
+    @CrossOrigin
+    @GetMapping("/v1/address/{address}/transactions")
     public GenericResponse<List<AddressTransaction>> function (@PathVariable String address) {
         String a = EthereumUtilities.removeHexPrefix(address.toLowerCase());
         List<AddressTransaction> transactions = this.addressTransactionService.findTransactionsByAddress(a);
         return new GenericResponse<>(transactions);
     }
 
-    @GetMapping("/v1/{address}/assets")
-    public GenericResponse<AddressAsset> assets (@PathVariable String address) {
+    @CrossOrigin
+    @GetMapping("/v1/address/{address}/assets")
+    public GenericResponse<List<String>> assets (@PathVariable String address) {
         String a = EthereumUtilities.removeHexPrefix(address.toLowerCase());
-        Optional<AddressAsset> assets = this.addressTransactionService.findAssetsByAddress(a);
-        if(assets.isPresent()) {
-            return new GenericResponse<>(assets.get());
-        } else {
-            return new GenericResponse<>(null);
-        }
+        List<AddressAsset> assets = this.addressTransactionService.findAssetsByAddress(a);
+        return new GenericResponse<>(assets.stream().map(AddressAsset::getContractAddress).collect(Collectors.toList()));
     }
 }
