@@ -14,7 +14,7 @@ io:
     nodeLocation: https://mainnet.infura.io/mMVAl9ZCBbtZ4sc0fBbO
 
 cassandra:
-  contactpoints: cassandra.internal.block16
+  contactpoints: localhost
 
 ---
 
