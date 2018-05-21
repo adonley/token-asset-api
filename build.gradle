@@ -28,8 +28,6 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.0.1.RELEASE'
     compile group: 'org.springframework', name: 'spring-webmvc', version: '5.0.6.RELEASE'
     compile group: 'io.netty', name: 'netty-all', version: '4.1.24.Final'
-    compile('org.springframework.boot:spring-boot-starter-amqp')
-    // compile('org.springframework.boot:spring-boot-starter-data-cassandra')
     compile('org.springframework.data:spring-data-cassandra:2.0.6.RELEASE')
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.0.1.RELEASE'
     compile(group: 'com.google.guava', name: 'guava', version: '24.0-jre')
