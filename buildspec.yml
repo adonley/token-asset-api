@@ -7,6 +7,7 @@ phases:
       - aws --version
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
       - REPOSITORY_URI=558247379009.dkr.ecr.us-east-2.amazonaws.com/assetapi
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
   build:
     commands:
       - echo Build started on `date`
@@ -18,6 +19,6 @@ phases:
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI
       - echo Writing image definitions file...
-      - printf '[{"name":"assetapi","imageUri":"%s"}]' $REPOSITORY_URI:lastest > imagedefinitions.json
+      - printf '[{"name":"assetapi","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
 artifacts:
     files: imagedefinitions.json

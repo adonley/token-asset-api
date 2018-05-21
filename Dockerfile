@@ -11,6 +11,7 @@ COPY gradlew /app
 ENV SPRING_PROFILES_ACTIVE ${SPRING_PROFILES_ACTIVE}
 
 RUN cd /app \
+    && chmod +x ./gradlew \
     && ./gradlew clean \
     && ./gradlew build -x test \
     && cp $(find . -name asset*.jar) /app.jar \
