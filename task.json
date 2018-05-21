@@ -1,4 +1,5 @@
 {
+    "executionRoleArn": "arn:aws:iam::558247379009:role/FargateTask",
     "family": "assetapi", 
     "networkMode": "awsvpc", 
     "containerDefinitions": [
@@ -11,7 +12,8 @@
                     "hostPort": 80, 
                     "protocol": "tcp"
                 }
-	     ]
+	     ],
+             "environment":[ { "name": "SPRING_PROFILES_ACTIVE", "value": "prod" }]
         }
     ], 
     "requiresCompatibilities": [
