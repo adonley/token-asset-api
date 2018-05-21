@@ -6,18 +6,37 @@ function:
 
 ---
 
+spring:
+  profiles: default
+
 io:
   block16:
     nodeLocation: https://mainnet.infura.io/mMVAl9ZCBbtZ4sc0fBbO
+
+cassandra:
+  contactpoints: cassandra.internal.block16
 
 ---
 
+
+spring:
+  profiles: compose
+
 io:
   block16:
     nodeLocation: https://mainnet.infura.io/mMVAl9ZCBbtZ4sc0fBbO
+
+cassandra:
+  contactpoints: cassandra
 
 ---
 
+spring:
+  profiles: prod
+
 io:
   block16:
     nodeLocation: https://mainnet.infura.io/mMVAl9ZCBbtZ4sc0fBbO
+
+cassandra:
+  contactpoints: cassandra.internal.block16
