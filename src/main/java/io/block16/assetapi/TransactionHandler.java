@@ -29,7 +29,7 @@ public class TransactionHandler {
         this.addressTransactionService = addressTransactionService;
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = {"http://localhost:4200", "http://127.0.0.1:4200", "https://wallet.block16.io"})
     @GetMapping("/v1/address/{address}/transactions")
     public GenericResponse<List<AddressTransaction>> function (@PathVariable String address) {
         String a = EthereumUtilities.removeHexPrefix(address.toLowerCase());
@@ -37,7 +37,7 @@ public class TransactionHandler {
         return new GenericResponse<>(transactions);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = {"http://localhost:4200", "http://127.0.0.1:4200", "https://wallet.block16.io"})
     @GetMapping("/v1/address/{address}/assets")
     public GenericResponse<List<String>> assets (@PathVariable String address) {
         String a = EthereumUtilities.removeHexPrefix(address.toLowerCase());
