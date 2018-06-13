@@ -69,6 +69,8 @@ public class RateLimiterInterceptor extends HandlerInterceptorAdapter {
             rateLimitDTO.setTimestamp(Instant.now().toEpochMilli());
             // Expire after a minute
             this.valueOperations.set(ipAddress, rateLimitDTO, 1, TimeUnit.MINUTES);
+            response.addHeader("X-RateLimit-Remaining", String.valueOf(minuteLimit - rateLimitDTO.getRequestCount()));
+            response.addHeader("X-RateLimit-Limit", String.valueOf(minuteLimit));
             return true;
         }
 
