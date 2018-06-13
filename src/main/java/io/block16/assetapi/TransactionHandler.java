@@ -2,6 +2,7 @@ package io.block16.assetapi;
 
 import io.block16.assetapi.domain.cassandra.AddressAsset;
 import io.block16.assetapi.domain.cassandra.AddressTransaction;
+import io.block16.assetapi.dto.FlattenedAddressTransaction;
 import io.block16.assetapi.service.AddressTransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 public class TransactionHandler {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    final AddressTransactionService addressTransactionService;
+    private final AddressTransactionService addressTransactionService;
 
     @Autowired
     public TransactionHandler(
@@ -31,17 +32,17 @@ public class TransactionHandler {
 
     @CrossOrigin
     @GetMapping("/v1/address/{address}/transactions")
-    public GenericResponse<List<AddressTransaction>> function (@PathVariable String address) {
+    public List<FlattenedAddressTransaction> function (@PathVariable String address) {
         String a = EthereumUtilities.removeHexPrefix(address.toLowerCase());
         List<AddressTransaction> transactions = this.addressTransactionService.findTransactionsByAddress(a);
-        return new GenericResponse<>(transactions);
+        return transactions.stream().map(FlattenedAddressTransaction::fromDomain).collect(Collectors.toList());
     }
 
     @CrossOrigin
     @GetMapping("/v1/address/{address}/assets")
-    public GenericResponse<List<String>> assets (@PathVariable String address) {
+    public List<String> assets (@PathVariable String address) {
         String a = EthereumUtilities.removeHexPrefix(address.toLowerCase());
         List<AddressAsset> assets = this.addressTransactionService.findAssetsByAddress(a);
-        return new GenericResponse<>(assets.stream().map(AddressAsset::getContractAddress).collect(Collectors.toList()));
+        return assets.stream().map(AddressAsset::getContractAddress).collect(Collectors.toList());
     }
 }
