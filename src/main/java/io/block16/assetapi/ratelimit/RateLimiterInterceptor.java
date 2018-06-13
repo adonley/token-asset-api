@@ -68,6 +68,7 @@ public class RateLimiterInterceptor extends HandlerInterceptorAdapter {
             this.valueOperations.set(ipAddress, rateLimitDTO, 1, TimeUnit.MINUTES);
             response.addHeader("X-RateLimit-Remaining", String.valueOf(minuteLimit - rateLimitDTO.getRequestCount()));
             response.addHeader("X-RateLimit-Limit", String.valueOf(minuteLimit));
+            response.addHeader("X-RateLimit-Reset", String.valueOf(rateLimitDTO.getTimestamp() + oneMinute));
             return true;
         }
 
@@ -80,6 +81,7 @@ public class RateLimiterInterceptor extends HandlerInterceptorAdapter {
         int remainingRequests = Math.max(minuteLimit - rateLimitDTO.getRequestCount(), 0);
         response.addHeader("X-RateLimit-Remaining", String.valueOf(remainingRequests));
         response.addHeader("X-RateLimit-Limit", String.valueOf(minuteLimit));
+        response.addHeader("X-RateLimit-Reset", String.valueOf(Instant.now().toEpochMilli() + timeRemaining));
 
         LOGGER.debug("Remaining time: {}, Request remaining: {}", timeRemaining, remainingRequests);
 
