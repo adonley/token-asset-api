@@ -52,6 +52,10 @@ public class RateLimiterInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // Don't rate limit options requests. Hope we don't come to regret this
+        if ("OPTIONS".equals(request.getMethod())) {
+            return true;
+        }
 
         // Get the IP address from the incoming headers
         String ipAddress = this.getClientIpAddress(request);
