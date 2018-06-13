@@ -1,5 +1,3 @@
-/*
-
 package io.block16.assetapi.ratelimit;
 
 import org.slf4j.Logger;
@@ -7,14 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class RateLimiterInterceptor extends HandlerInterceptorAdapter {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -50,5 +45,3 @@ public class RateLimiterInterceptor extends HandlerInterceptorAdapter {
         // loop and finalize all limiters
     }
 }
-
-*/
