@@ -1,29 +1,43 @@
 package io.block16.assetapi.ratelimit;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.block16.assetapi.GenericResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.Instant;
 
+import java.io.PrintWriter;
+import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
 
 public class RateLimiterInterceptor extends HandlerInterceptorAdapter {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private int minuteLimit = 30;
-    private final long oneMinute = 60 * 1000;
+    private int MINUTE_LIMIT = 30;
+    private final long ONE_MINUTE = 60 * 1000;
     private final ValueOperations<String, Object> valueOperations;
+    private static String TOO_MAN_REQUESTS_JSON;
 
     public RateLimiterInterceptor(RedisTemplate<String, Object> redisTemplate) {
         this.valueOperations = redisTemplate.opsForValue();
+        GenericResponse<Object> genericResponse = new GenericResponse<>(null);
+        genericResponse.setMessage("Too many requests. Please wait until next period to send additional requests.");
+        genericResponse.setError(true);
+        try {
+            TOO_MAN_REQUESTS_JSON = new ObjectMapper().writeValueAsString(genericResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static final String[] IP_HEADER_CANDIDATES = {
@@ -68,11 +82,12 @@ public class RateLimiterInterceptor extends HandlerInterceptorAdapter {
             rateLimitDTO.setBanned(false);
             rateLimitDTO.setRequestCount(1);
             rateLimitDTO.setTimestamp(Instant.now().toEpochMilli());
+
             // Expire after a minute
             this.valueOperations.set(ipAddress, rateLimitDTO, 1, TimeUnit.MINUTES);
-            response.addHeader("X-RateLimit-Remaining", String.valueOf(minuteLimit - rateLimitDTO.getRequestCount()));
-            response.addHeader("X-RateLimit-Limit", String.valueOf(minuteLimit));
-            response.addHeader("X-RateLimit-Reset", String.valueOf(rateLimitDTO.getTimestamp() + oneMinute));
+            response.addHeader("X-RateLimit-Remaining", String.valueOf(MINUTE_LIMIT - rateLimitDTO.getRequestCount()));
+            response.addHeader("X-RateLimit-Limit", String.valueOf(MINUTE_LIMIT));
+            response.addHeader("X-RateLimit-Reset", String.valueOf(rateLimitDTO.getTimestamp() + ONE_MINUTE));
             return true;
         }
 
@@ -80,20 +95,24 @@ public class RateLimiterInterceptor extends HandlerInterceptorAdapter {
 
         // Request count
         rateLimitDTO.setRequestCount(rateLimitDTO.getRequestCount() + 1);
-        long timeRemaining = rateLimitDTO.getTimestamp() + oneMinute - Instant.now().toEpochMilli();
+        long timeRemaining = rateLimitDTO.getTimestamp() + ONE_MINUTE - Instant.now().toEpochMilli();
         this.valueOperations.set(ipAddress, rateLimitDTO, Math.max(timeRemaining, 0), TimeUnit.MILLISECONDS);
-        int remainingRequests = Math.max(minuteLimit - rateLimitDTO.getRequestCount(), 0);
+        int remainingRequests = Math.max(MINUTE_LIMIT - rateLimitDTO.getRequestCount(), 0);
         response.addHeader("X-RateLimit-Remaining", String.valueOf(remainingRequests));
-        response.addHeader("X-RateLimit-Limit", String.valueOf(minuteLimit));
+        response.addHeader("X-RateLimit-Limit", String.valueOf(MINUTE_LIMIT));
         response.addHeader("X-RateLimit-Reset", String.valueOf(Instant.now().toEpochMilli() + timeRemaining));
 
         LOGGER.debug("Remaining time: {}, Request remaining: {}", timeRemaining, remainingRequests);
 
         // Should allow
-        boolean allowRequest = rateLimitDTO.getRequestCount() <= minuteLimit;
+        boolean allowRequest = rateLimitDTO.getRequestCount() <= MINUTE_LIMIT;
 
         if(!allowRequest) {
             response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+            response.addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+            PrintWriter writer = response.getWriter();
+            writer.print(TOO_MAN_REQUESTS_JSON);
+            writer.flush();
             return false;
         }
         return true;
