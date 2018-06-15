@@ -29,3 +29,9 @@ out/
 .DS_Store
 
 deploy.sh
+
+assetapi/build
+assetapi/out
+
+ratelimiting/build
+ratelimiting/out
