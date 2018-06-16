@@ -100,8 +100,6 @@ public class RateLimiterInterceptor extends HandlerInterceptorAdapter {
         response.addHeader("X-RateLimit-Limit", String.valueOf(MINUTE_LIMIT));
         response.addHeader("X-RateLimit-Reset", String.valueOf(Instant.now().toEpochMilli() + timeRemaining));
 
-        LOGGER.info("Remaining time: {}, Request remaining: {}", timeRemaining, remainingRequests);
-
         // Should allow
         boolean allowRequest = rateLimitDTO.getRequestCount() <= MINUTE_LIMIT;
 
