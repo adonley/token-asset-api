@@ -9,7 +9,7 @@ ENV SPRING_PROFILES_ACTIVE ${SPRING_PROFILES_ACTIVE}
 RUN cd /app \
     && chmod +x ./gradlew \
     && ./gradlew clean \
-    && ./gradlew build -x test \
+    && ./gradlew build -x test --stacktrace \
     && cp $(find . -name asset*.jar) /app.jar \
     && sh -c 'chmod +x /app.jar' \
     && cd / \

@@ -40,10 +40,26 @@ public class TransactionHandler {
         if (after == null) {
             transactions = this.addressTransactionService.findTransactionsByAddress(a);
         } else {
-            transactions = this.addressTransactionService.findTransactionsByAddressAfter(address, after);
+            transactions = this.addressTransactionService.findTransactionsByAddressAfter(a, after);
         }
         return transactions.stream().map(FlattenedAddressTransaction::fromDomain).collect(Collectors.toList());
     }
+
+    /*@CrossOrigin
+    @GetMapping("/v1/address/{address}/transactions")
+    public List<FlattenedAddressTransaction> function (
+            @PathVariable final String address,
+            @RequestParam(value = "limit",  required = false) final Long limit
+    ) {
+        String a = EthereumUtilities.removeHexPrefix(address.toLowerCase());
+        List<AddressTransaction> transactions;
+        if (limit == null) {
+            transactions = this.addressTransactionService.findTransactionsByAddress(a);
+        } else {
+            transactions = this.addressTransactionService.findTopTenTransactionsByAddress(a);
+        }
+        return transactions.stream().map(FlattenedAddressTransaction::fromDomain).collect(Collectors.toList());
+    }*/
 
     @CrossOrigin
     @GetMapping("/v1/address/{address}/assets")

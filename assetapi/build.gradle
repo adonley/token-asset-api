@@ -23,16 +23,16 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.0.1.RELEASE'
     compile group: 'org.springframework', name: 'spring-webmvc', version: '5.0.6.RELEASE'
     compile group: 'io.netty', name: 'netty-all', version: '4.1.24.Final'
-    compile('org.springframework.data:spring-data-cassandra:2.0.6.RELEASE')
+    compile('org.springframework.data:spring-data-cassandra:2.0.9.RELEASE')
     compile group: 'commons-codec', name: 'commons-codec', version: '1.11'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.0.1.RELEASE'
     compile(group: 'com.google.guava', name: 'guava', version: '24.0-jre')
     compile('org.web3j:core:3.3.1')
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    compileOnly('org.projectlombok:lombok')
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.2'
+
 }

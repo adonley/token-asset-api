@@ -73,11 +73,15 @@ public class AddressTransactionService {
     }
 
     public List<AddressTransaction> findTransactionsByAddress(String address) {
-        return this.addressTransactionRepository.findTop10ByKeyAddressLimit(address);
+        return this.addressTransactionRepository.findTop100ByKeyAddressLimit(address);
     }
 
     public List<AddressTransaction> findTransactionsByAddressAfter(String address, Date after) {
         return this.addressTransactionRepository.findByAddressAfter(address, after);
+    }
+
+    public List<AddressTransaction> findTopTenTransactionsByAddress(String address) {
+        return this.addressTransactionRepository.findTop10ByAddress(address);
     }
 
     public List<AddressAsset> findAssetsByAddress(String address) {
