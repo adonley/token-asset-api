@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class RateLimiterInterceptor extends HandlerInterceptorAdapter {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private int MINUTE_LIMIT = 30;
+    private int MINUTE_LIMIT = 60;
     private final long ONE_MINUTE = 60 * 1000;
     private final ValueOperations<String, Object> valueOperations;
     private static String TOO_MAN_REQUESTS_JSON;
