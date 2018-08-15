@@ -8,11 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,9 +31,17 @@ public class TransactionHandler {
 
     @CrossOrigin
     @GetMapping("/v1/address/{address}/transactions")
-    public List<FlattenedAddressTransaction> function (@PathVariable String address) {
+    public List<FlattenedAddressTransaction> function (
+            @PathVariable final String address,
+            @RequestParam(value = "after",  required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final Date after
+    ) {
         String a = EthereumUtilities.removeHexPrefix(address.toLowerCase());
-        List<AddressTransaction> transactions = this.addressTransactionService.findTransactionsByAddress(a);
+        List<AddressTransaction> transactions;
+        if (after == null) {
+            transactions = this.addressTransactionService.findTransactionsByAddress(a);
+        } else {
+            transactions = this.addressTransactionService.findTransactionsByAddressAfter(address, after);
+        }
         return transactions.stream().map(FlattenedAddressTransaction::fromDomain).collect(Collectors.toList());
     }
 
