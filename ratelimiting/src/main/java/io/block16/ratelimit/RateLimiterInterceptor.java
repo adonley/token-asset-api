@@ -70,7 +70,7 @@ public class RateLimiterInterceptor extends HandlerInterceptorAdapter {
         }
 
         String apiKey = request.getParameter("apiKey");
-        if (apiKey.equals("Petros")) {
+        if (apiKey != null && apiKey.equals("Petros")) {
             return true;
         }
 

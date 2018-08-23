@@ -10,11 +10,11 @@ io:
   block16:
     nodeLocation: https://mainnet.infura.io/mMVAl9ZCBbtZ4sc0fBbO
 
-cassandra:
-  contactpoints: localhost
-
 redis:
   hostname: localhost
+
+cassandra:
+  contactpoints: localhost
 
 ---
 
@@ -26,11 +26,11 @@ io:
   block16:
     nodeLocation: https://mainnet.infura.io/mMVAl9ZCBbtZ4sc0fBbO
 
-cassandra:
-  contactpoints: cassandra
-
 redis:
   hostname: redis
+
+cassandra:
+  contactpoints: cassandra
 
 ---
 
@@ -41,8 +41,8 @@ io:
   block16:
     nodeLocation: https://mainnet.infura.io/mMVAl9ZCBbtZ4sc0fBbO
 
-cassandra:
-  contactpoints: cassandra.internal.block16
-
 redis:
   hostname: redis.internal.block16
+
+cassandra:
+  contactpoints: cassandra1.internal.block16,cassandra2.internal.block16,cassandra3.internal.block16
