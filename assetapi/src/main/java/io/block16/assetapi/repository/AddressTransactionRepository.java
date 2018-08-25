@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface AddressTransactionRepository extends CassandraRepository<AddressTransaction, TransactionKey> {
     @Query("select * from transactions WHERE address=?0 LIMIT 20")
-    List<AddressTransaction> findTop100ByKeyAddressLimit(String address);
+    List<AddressTransaction> findTopByKeyAddressLimit(String address);
 
     @Query("select * from transactions WHERE address = ?0 and transaction_date > ?1 LIMIT 10")
     List<AddressTransaction> findByAddressAfter(String address, Date after);
